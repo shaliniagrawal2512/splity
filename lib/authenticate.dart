@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Authenticate {
   Future<String> signInWithEmail(String email, String password) async {
@@ -38,7 +38,6 @@ class Authenticate {
   Future<String> forgetPassword(String email) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-
       return 'Password Reset Email has been sent !';
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -48,11 +47,27 @@ class Authenticate {
     return 'Check your internet connection or try again later';
   }
 
+  Future<String> googleLogin() async {
+    GoogleSignIn _googleSignIn = GoogleSignIn();
+    try {
+      var result = await _googleSignIn.signIn();
+      if (result == null) {
+        return "Try Again";
+      }
+      final userData = await result.authentication;
+      final credential = GoogleAuthProvider.credential(
+          accessToken: userData.accessToken, idToken: userData.idToken);
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      return "Success";
+    } catch (error) {
+      return "Try Again";
+    }
+  }
+
   Future<void> logOut() async {
     await FirebaseAuth.instance.signOut();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('email');
-    prefs.remove('phoneNumber');
     prefs.remove('name');
   }
 
