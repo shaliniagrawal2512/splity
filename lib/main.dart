@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           colorScheme: const ColorScheme.dark().copyWith(
-            primary: const Color(0xff373445),
+            primary: const Color(0xff1DCE77),
             secondary: const Color(0xff1DCE77),
           ),
           scaffoldBackgroundColor: const Color(0xff362B45),

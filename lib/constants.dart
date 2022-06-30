@@ -15,3 +15,6 @@ const kInputDecoration = InputDecoration(
     borderSide: BorderSide(color: Color(0xff1DCE77), width: 3.0),
   ),
 );
+
+ButtonStyle kStyling =
+    ElevatedButton.styleFrom(side: const BorderSide(color: Color(0xff1ec677)));

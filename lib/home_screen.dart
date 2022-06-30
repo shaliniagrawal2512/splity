@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:splity/account.dart';
 import 'package:splity/activity.dart';
+import 'package:splity/create_group.dart';
 import 'package:splity/groups.dart';
 
 import 'friends.dart';
@@ -32,7 +33,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     icon: const Icon(Icons.search)),
                 IconButton(
                     tooltip: "Create group",
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  const CreateGroup()));
+                    },
                     icon: const Icon(Icons.group_add)),
               ],
               backgroundColor: const Color(0xff373445),

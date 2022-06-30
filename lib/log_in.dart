@@ -151,7 +151,8 @@ class _LogInState extends State<LogIn> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (BuildContext context) => ForgetPassword()));
+                          builder: (BuildContext context) =>
+                              const ForgetPassword()));
                 },
                 child: const Text("Forgot Password ?",
                     style: TextStyle(color: Color(0xff1dce77))),
