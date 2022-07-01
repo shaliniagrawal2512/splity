@@ -2,7 +2,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:splity/add_expense_button.dart';
 import 'package:splity/balances.dart';
+import 'package:splity/charts.dart';
 import 'package:splity/settle_up.dart';
+import 'package:splity/totals.dart';
 
 import 'group_settings.dart';
 
@@ -33,8 +35,8 @@ class GroupInfo extends StatelessWidget {
     List<Widget> tabs = [
       const SettleUp(),
       const Balances(),
-      Container(),
-      Container()
+      const Totals(),
+      const Charts()
     ];
     final Color color =
         Colors.primaries[Random().nextInt(Colors.primaries.length)];
