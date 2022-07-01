@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 const kInputDecoration = InputDecoration(
@@ -18,3 +20,18 @@ const kInputDecoration = InputDecoration(
 
 ButtonStyle kStyling =
     ElevatedButton.styleFrom(side: const BorderSide(color: Color(0xff1ec677)));
+
+Decoration kBoxDecoration = BoxDecoration(
+  image: DecorationImage(
+      colorFilter: ColorFilter.mode(
+          Colors.primaries[Random().nextInt(Colors.primaries.length)],
+          BlendMode.modulate),
+      fit: BoxFit.fill,
+      image: const AssetImage("assets/pattern3.jpg")),
+  shape: BoxShape.circle,
+);
+
+ButtonStyle kStyling2 = ElevatedButton.styleFrom(
+    textStyle: const TextStyle(color: Colors.white),
+    primary: const Color(0xff362B45),
+    side: const BorderSide(color: Color(0xff1ec677), width: 4));

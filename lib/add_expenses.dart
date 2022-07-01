@@ -18,13 +18,6 @@ class _AddExpenseState extends State<AddExpense> {
     final _description = TextEditingController();
     final _member = TextEditingController();
     final _amount = TextEditingController();
-    @override
-    void dispose() {
-      _member.dispose();
-      _description.dispose();
-      _amount.dispose();
-      super.dispose();
-    }
 
     final _formKey = GlobalKey<FormState>();
     DateTime selectedDate = DateTime.now();
@@ -89,6 +82,7 @@ class _AddExpenseState extends State<AddExpense> {
               ListTile(
                 leading: getText("With you and:"),
                 title: TextFormField(
+                  controller: _member,
                   decoration: kInputDecoration.copyWith(
                       hintText: "Enter names, emails"),
                   minLines: 1,
