@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:splity/constants.dart';
+import 'package:splity/services.dart';
 
 class CreateGroup extends StatefulWidget {
   const CreateGroup({Key? key}) : super(key: key);
@@ -22,13 +23,13 @@ class _CreateGroupState extends State<CreateGroup> {
     super.dispose();
   }
 
-  bool isSelected = false;
-  List<bool> res = [false, false, false, true];
+  List<String> res = ["Trip", "Home", "Couple", "Others"];
+  String selected = "Others";
   Widget getChip(String label, IconData icon, int index) {
     return FilterChip(
         elevation: 5,
         showCheckmark: false,
-        selected: res[index],
+        selected: selected == label ? true : false,
         selectedColor: const Color(0xff1ec677),
         label: Row(
           children: [
@@ -38,13 +39,7 @@ class _CreateGroupState extends State<CreateGroup> {
           ],
         ),
         onSelected: (value) {
-          for (int i = 0; i < 4; i++) {
-            if (i == index) {
-              res[i] = true;
-            } else {
-              res[i] = false;
-            }
-          }
+          selected = res[index];
           setState(() {});
         });
   }
@@ -74,12 +69,21 @@ class _CreateGroupState extends State<CreateGroup> {
             Padding(
               padding: const EdgeInsets.all(14.0),
               child: GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     if (_formKey.currentState!.validate()) {
-                      // setState(() {
-                      //   showSpinner = true;
-                      // });
+                      setState(() {
+                        showSpinner = true;
+                      });
                       _formKey.currentState!.save();
+                      String res = await DataBases()
+                          .groupCreate(_group.text, selected, isSimplify);
+                      setState(() {
+                        showSpinner = false;
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(res),
+                          duration: const Duration(seconds: 7)));
+                      Navigator.pop(context);
                     }
                   },
                   child: const Text("Save",

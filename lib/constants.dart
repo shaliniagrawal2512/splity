@@ -35,3 +35,18 @@ ButtonStyle kStyling2 = ElevatedButton.styleFrom(
     textStyle: const TextStyle(color: Colors.white),
     primary: const Color(0xff362B45),
     side: const BorderSide(color: Color(0xff1ec677), width: 4));
+
+TextStyle kTextStyle1 = const TextStyle(
+  fontSize: 20,
+  fontWeight: FontWeight.bold,
+);
+
+TextStyle kTextStyle12 = const TextStyle(
+  fontSize: 20,
+  fontWeight: FontWeight.bold,
+);
+
+TextStyle kTextStyle3 = const TextStyle(
+  fontSize: 20,
+  fontWeight: FontWeight.bold,
+);

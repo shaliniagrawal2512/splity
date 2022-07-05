@@ -1,11 +1,23 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:splity/friends.dart';
 
 class SettleUp extends StatelessWidget {
   const SettleUp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    BoxDecoration getDecoration() {
+      return BoxDecoration(
+        image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+                Colors.primaries[Random().nextInt(Colors.primaries.length)],
+                BlendMode.modulate),
+            fit: BoxFit.fill,
+            image: const AssetImage("assets/pattern3.jpg")),
+        shape: BoxShape.circle,
+      );
+    }
+
     return Scaffold(
         appBar: AppBar(
           actions: [
@@ -34,7 +46,7 @@ class SettleUp extends StatelessWidget {
               title: const Text("Shalini Agrawal"),
               leading: Container(
                 width: 40,
-                decoration: const Friend().getDecoration(),
+                decoration: getDecoration(),
               ),
             );
           },

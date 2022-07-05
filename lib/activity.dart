@@ -1,10 +1,11 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:splity/add_expense_button.dart';
+import 'package:splity/user_group_model.dart';
 
 class Activity extends StatelessWidget {
-  const Activity({Key? key}) : super(key: key);
-
+  const Activity({Key? key, required this.user}) : super(key: key);
+  final OurUser user;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +68,12 @@ class Activity extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: const ExpenseButton(tag: 3),
+      floatingActionButton: ExpenseButton(
+        tag: 3,
+        user: user,
+        groups: const [],
+        selectedGroup: "",
+      ),
     );
   }
 }

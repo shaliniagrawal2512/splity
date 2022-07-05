@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:splity/add_expenses.dart';
+import 'package:splity/user_group_model.dart';
 
 class ExpenseButton extends StatelessWidget {
-  const ExpenseButton({Key? key, required this.tag}) : super(key: key);
+  const ExpenseButton({
+    Key? key,
+    required this.tag,
+    required this.groups,
+    required this.user,
+    required this.selectedGroup,
+  }) : super(key: key);
   final int tag;
+  final List<OurGroup> groups;
+  final OurUser user;
+  final String selectedGroup;
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
@@ -15,7 +25,10 @@ class ExpenseButton extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (BuildContext context) => const AddExpense()));
+                builder: (BuildContext context) => AddExpense(
+                    inGroup: tag == 4 ? true : false,
+                    groups: groups,
+                    user: user)));
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       tooltip: "Add expenses",

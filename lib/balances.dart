@@ -1,13 +1,25 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:splity/constants.dart';
-
-import 'friends.dart';
 
 class Balances extends StatelessWidget {
   const Balances({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    BoxDecoration getDecoration() {
+      return BoxDecoration(
+        image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+                Colors.primaries[Random().nextInt(Colors.primaries.length)],
+                BlendMode.modulate),
+            fit: BoxFit.fill,
+            image: const AssetImage("assets/pattern3.jpg")),
+        shape: BoxShape.circle,
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Balances", style: TextStyle(fontSize: 20)),
@@ -19,7 +31,7 @@ class Balances extends StatelessWidget {
             return ExpansionTile(
               leading: Container(
                 width: 40,
-                decoration: const Friend().getDecoration(),
+                decoration: getDecoration(),
               ),
               title: const Text("Shanu owes INR rs 167.00 in total"),
               children: [
@@ -38,7 +50,7 @@ class Balances extends StatelessWidget {
                                 Container(
                                   width: 25,
                                   height: 25,
-                                  decoration: const Friend().getDecoration(),
+                                  decoration: getDecoration(),
                                 ),
                                 const SizedBox(width: 10),
                                 const Text(

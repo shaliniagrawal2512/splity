@@ -1,10 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:splity/constants.dart';
+import 'package:splity/services.dart';
+import 'package:splity/user_group_model.dart';
 
 class AddExpense extends StatefulWidget {
-  const AddExpense({Key? key}) : super(key: key);
+  const AddExpense(
+      {Key? key,
+      required this.inGroup,
+      required this.groups,
+      required this.user})
+      : super(key: key);
+  final bool inGroup;
+  final List<OurGroup> groups;
+  final OurUser user;
 
   @override
   State<AddExpense> createState() => _AddExpenseState();
@@ -16,7 +27,6 @@ class _AddExpenseState extends State<AddExpense> {
   @override
   Widget build(BuildContext context) {
     final _description = TextEditingController();
-    final _member = TextEditingController();
     final _amount = TextEditingController();
 
     final _formKey = GlobalKey<FormState>();
@@ -60,12 +70,21 @@ class _AddExpenseState extends State<AddExpense> {
         title: const Text("Add Expense"),
         actions: [
           IconButton(
-            onPressed: () {
+            onPressed: () async {
               if (_formKey.currentState!.validate()) {
                 setState(() {
                   showSpinner = true;
                 });
                 _formKey.currentState!.save();
+                String res = '';
+                res = await DataBases().addPersonalExpenses(_description.text,
+                    _amount.text, Timestamp.fromDate(selectedDate));
+                setState(() {
+                  showSpinner = false;
+                });
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(res), duration: const Duration(seconds: 7)));
+                Navigator.pop(context);
               }
             },
             icon: const Icon(Icons.check, color: Color(0xff1ec677)),
@@ -79,15 +98,14 @@ class _AddExpenseState extends State<AddExpense> {
           child: ListView(
             padding: const EdgeInsets.all(20),
             children: [
-              ListTile(
-                leading: getText("With you and:"),
-                title: TextFormField(
-                  controller: _member,
-                  decoration: kInputDecoration.copyWith(
-                      hintText: "Enter names, emails"),
-                  minLines: 1,
-                ),
-              ),
+              widget.inGroup
+                  ? const SizedBox(height: 3)
+                  : ListTile(
+                      leading: const Text("Chosen Group :",
+                          style: TextStyle(
+                              color: Color(0xff1ec677), fontSize: 20)),
+                      title: getText(""),
+                    ),
               const Divider(),
               ListTile(
                   leading: getContainer(Icons.receipt_outlined),

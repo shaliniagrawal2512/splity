@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:splity/add_expense_button.dart';
+import 'package:splity/user_group_model.dart';
 
 class Friend extends StatelessWidget {
   BoxDecoration getDecoration() {
@@ -16,12 +17,15 @@ class Friend extends StatelessWidget {
     );
   }
 
-  const Friend({Key? key}) : super(key: key);
+  const Friend({Key? key, required this.user, required this.groups})
+      : super(key: key);
+  final OurUser user;
+  final List<OurGroup> groups;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
-        itemCount: 10,
+        itemCount: user.friends.length,
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
             minVerticalPadding: 25,
@@ -34,12 +38,21 @@ class Friend extends StatelessWidget {
                     style: TextStyle(color: Color(0xff1ec677))),
               ],
             ),
-            title:
-                const Text("Shalini Agrawal", style: TextStyle(fontSize: 18)),
+            title: Text(user.friends[index]["FriendName"],
+                style: const TextStyle(fontSize: 18)),
+            subtitle: Text(
+              user.friends[index]["friendEmail"],
+              style: const TextStyle(fontSize: 15),
+            ),
           );
         },
       ),
-      floatingActionButton: const ExpenseButton(tag: 2),
+      floatingActionButton: ExpenseButton(
+        tag: 2,
+        user: user,
+        groups: groups,
+        selectedGroup: '',
+      ),
     );
   }
 }

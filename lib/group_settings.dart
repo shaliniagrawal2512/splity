@@ -1,12 +1,35 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:splity/friends.dart';
-import 'package:splity/group_info.dart';
+import 'package:splity/services.dart';
+import 'package:splity/user_group_model.dart';
+import 'get_box.dart';
 
 class Settings extends StatelessWidget {
-  const Settings({Key? key}) : super(key: key);
-
+  const Settings({Key? key, required this.group, required this.members})
+      : super(key: key);
+  final OurGroup group;
+  final List<OurUser> members;
   @override
   Widget build(BuildContext context) {
+    IconData getIcon(String label) {
+      if (label == "Home") return Icons.home;
+      if (label == "Couple") return Icons.favorite;
+      if (label == "Home") return Icons.home;
+      return Icons.receipt;
+    }
+
+    BoxDecoration getDecoration() {
+      return BoxDecoration(
+        image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+                Colors.primaries[Random().nextInt(Colors.primaries.length)],
+                BlendMode.modulate),
+            fit: BoxFit.fill,
+            image: const AssetImage("assets/pattern3.jpg")),
+        shape: BoxShape.circle,
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Group Settings", style: TextStyle(fontSize: 20)),
@@ -16,9 +39,15 @@ class Settings extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         children: [
           ListTile(
-            leading: const GroupInfo().getBox(Colors.red, 50, 50, null,
-                "assets/pattern3.jpg", 8, BlendMode.modulate),
-            title: const Text("Sangam Trip", style: TextStyle(fontSize: 18)),
+            leading: Box(
+                color: Colors.pink,
+                width: 50,
+                icon: getIcon(group.type),
+                radius: 10,
+                blend: BlendMode.modulate,
+                image: 'assets/pattern3.jpg',
+                height: 50),
+            title: Text(group.name, style: const TextStyle(fontSize: 18)),
             trailing:
                 IconButton(onPressed: () {}, icon: const Icon(Icons.edit)),
           ),
@@ -26,7 +55,10 @@ class Settings extends StatelessWidget {
           const ListTile(title: Text("Group members")),
           ListTile(
               leading: const Icon(Icons.group_add),
-              onTap: () {},
+              onTap: () async {
+                String res = await DataBases()
+                    .addPeopleToGroup(['shanuagrawal133@gmail.com'], group.id);
+              },
               title: const Text(
                 "Add people to group",
                 style: TextStyle(fontSize: 20),
@@ -42,27 +74,35 @@ class Settings extends StatelessWidget {
               constraints: const BoxConstraints(maxHeight: 3000000),
               child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: 3,
+                  itemCount: members.length,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, idx) {
+                    int p = group.members[idx]["totalShare"];
                     return ListTile(
                       minVerticalPadding: 15,
                       leading: Container(
-                          width: 35,
-                          height: 35,
-                          decoration: const Friend().getDecoration()),
+                          width: 35, height: 35, decoration: getDecoration()),
                       trailing: Column(
-                        children: const [
-                          Text("owes",
-                              style: TextStyle(color: Color(0xff9D2228))),
-                          Text("INR rs 189.00",
-                              style: TextStyle(color: Color(0xff1ec677))),
+                        children: [
+                          p != 0
+                              ? const Text("owes",
+                                  style: TextStyle(
+                                      color: Color(0xff9D2228), fontSize: 15))
+                              : const Text("Settled up",
+                                  style: TextStyle(
+                                      color: Color(0xff1ec677), fontSize: 15)),
+                          p != 0
+                              ? Text(group.members[idx]["totalShare"],
+                                  style:
+                                      const TextStyle(color: Color(0xff1ec677)))
+                              : const Text("Noting due",
+                                  style: TextStyle(fontSize: 12)),
                         ],
                       ),
-                      subtitle: const Text("shanuagrawal133@gmail.com",
+                      subtitle: Text(members[idx].email,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 12)),
-                      title: const Text("Shalini Agrawal"),
+                          style: const TextStyle(fontSize: 12)),
+                      title: Text(members[idx].name),
                     );
                   })),
           ListTile(

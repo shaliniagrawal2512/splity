@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:splity/services.dart';
+import 'package:splity/user_group_model.dart';
 
 class Authenticate {
   Future<String> signInWithEmail(String email, String password) async {
@@ -18,12 +21,24 @@ class Authenticate {
     }
   }
 
-  Future<String> signUpWithEmail(String email, String password) async {
+  Future<String> signUpWithEmail(
+      String email, String password, String name) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      final userCreate =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      OurUser user = OurUser(
+          uid: userCreate.user!.uid,
+          email: email,
+          name: name,
+          accountCreated: Timestamp.now(),
+          friends: [],
+          groups: [],
+          expenses: [],
+          activity: []);
+      DataBases().createUser(user);
       return 'success';
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
@@ -57,18 +72,37 @@ class Authenticate {
       final userData = await result.authentication;
       final credential = GoogleAuthProvider.credential(
           accessToken: userData.accessToken, idToken: userData.idToken);
-      await FirebaseAuth.instance.signInWithCredential(credential);
+      final userCreate =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      if (userCreate.additionalUserInfo!.isNewUser) {
+        if (userCreate.user == null) return "Success";
+        OurUser user = OurUser(
+            uid: userCreate.user!.uid,
+            email: userCreate.user!.email!,
+            name: userCreate.user!.displayName!,
+            accountCreated: Timestamp.now(),
+            friends: [],
+            groups: [],
+            expenses: [],
+            activity: []);
+        DataBases().createUser(user);
+      }
       return "Success";
     } catch (error) {
       return "Try Again";
     }
   }
 
-  Future<void> logOut() async {
-    await FirebaseAuth.instance.signOut();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('email');
-    prefs.remove('name');
+  Future<String> logOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.remove('email');
+      prefs.remove('name');
+      return "success";
+    } catch (e) {
+      return "error! Try again ";
+    }
   }
 
   Future<void> updateUserPassword(String password) async {

@@ -34,8 +34,8 @@ class _SignUpState extends State<SignUp> {
         showSpinner = true;
       });
       _formKey.currentState!.save();
-      String result =
-          await Authenticate().signUpWithEmail(_email.text, _password.text);
+      String result = await Authenticate()
+          .signUpWithEmail(_email.text, _password.text, _fullName.text);
       if (result == 'success') {
         // Authenticate().postDetailsToFirestore(nameController.text);
         SharedPreferences prefs = await SharedPreferences.getInstance();
