@@ -60,7 +60,7 @@ class Groups extends StatelessWidget {
                           fontWeight: FontWeight.w500, fontSize: 20)),
                   const SizedBox(height: 7),
                   const Text(
-                    "hello",
+                    "you owe INR rs 350",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
